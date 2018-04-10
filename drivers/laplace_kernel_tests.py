@@ -3,6 +3,7 @@ import pyBIE2D_Speed_Tests as ST
 from pyBIE2D_Speed_Tests.laplace_kernel.lk_numpy import lk_numpy
 from pyBIE2D_Speed_Tests.laplace_kernel.lk_numexpr import lk_numexpr
 from pyBIE2D_Speed_Tests.laplace_kernel.lk_numba import lk_pure_numba, lk_mixed_numba
+from pyBIE2D_Speed_Tests.laplace_kernel.lk_fortran import lk_fortran
 import numexpr as ne
 # import ctypes
 # mkl_rt = ctypes.CDLL('libmkl_rt.so')
@@ -31,42 +32,46 @@ for N, M in zip(NS, MS):
     source = np.row_stack([source_x, source_y])
     target = np.row_stack([target_x, target_y])
     tau = np.random.rand(N)
-    qw = np.ones_like(tau)
     sd = np.empty(N, dtype=float)
     D = np.empty([M, N], dtype=float)
     out = np.empty(M, dtype=float)
 
     print('\nBasic numpy')
-    result_numpy = lk_numpy(source, target, tau, qw)
-    %timeit lk_numpy(source, target, tau, qw)
+    result_numpy = lk_numpy(source, target, tau)
+    %timeit lk_numpy(source, target, tau)
 
     print('\nNumexpr -- One Core')
     ne.set_num_threads(1)
     ne.set_vml_num_threads(1)
-    result_numexpr = lk_numexpr(source, target, tau, qw, D)
-    %timeit lk_numexpr(source, target, tau, qw, D)
+    result_numexpr = lk_numexpr(source, target, tau, D)
+    %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumexpr -- Max Cores')
     ne.set_num_threads(ne.detect_number_of_cores())
     ne.set_vml_num_threads(1)
-    %timeit lk_numexpr(source, target, tau, qw, D)
+    %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumexpr -- Max VML Cores')
     ne.set_num_threads(1)
     ne.set_vml_num_threads(ne.detect_number_of_cores())
-    %timeit lk_numexpr(source, target, tau, qw, D)
+    %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumba -- Pure')
-    lk_pure_numba(source, target, tau, qw, sd, out)
+    lk_pure_numba(source, target, tau, sd, out)
     result_pure_numba = out.copy()
-    %timeit lk_pure_numba(source, target, tau, qw, sd, out)
+    %timeit lk_pure_numba(source, target, tau, sd, out)
 
     print('\nNumba -- Mixed')
-    lk_mixed_numba(source, target, tau, qw, D, out)
+    lk_mixed_numba(source, target, tau, D, out)
     result_mixed_numba = out.copy()
-    %timeit lk_mixed_numba(source, target, tau, qw, D, out)
+    %timeit lk_mixed_numba(source, target, tau, D, out)
+
+    print('\nFortran -- Serial')
+    result_fortran = lk_fortran(source, target, tau)
+    %timeit lk_fortran(source, target, tau)
 
     print('\nSanity Checks')
     print('Numpy vs. Numexpr    ', np.allclose(result_numpy, result_numexpr))
     print('Numpy vs. Pure Numba ', np.allclose(result_numpy, result_pure_numba))
     print('Numpy vs. Mixed Numba', np.allclose(result_numpy, result_mixed_numba))
+    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran))

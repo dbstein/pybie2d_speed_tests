@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
+from numpy.distutils.core import setup, Extension
 
 here = path.abspath(path.dirname(__file__))
 
@@ -22,6 +23,12 @@ setup(
         'License :: Apache 2',
         'Programming Language :: Python :: 2',
     ],
+    ext_modules =   [Extension( '_fortran_laplace_kernel',
+                        ['src/fortran_laplace_kernel.f90',
+                        ],
+                        extra_f90_compile_args=['-O3',],
+                        libraries=['gomp'],
+                    )],
     packages=find_packages(),
     install_requires=['numpy', 'numexpr', 'numba'],
 )
