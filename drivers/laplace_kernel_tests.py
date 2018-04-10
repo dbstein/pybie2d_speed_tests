@@ -67,11 +67,16 @@ for N, M in zip(NS, MS):
     %timeit lk_mixed_numba(source, target, tau, D, out)
 
     print('\nFortran -- Serial')
-    result_fortran = lk_fortran(source, target, tau)
-    %timeit lk_fortran(source, target, tau)
+    result_fortran_serial = lk_fortran(source, target, tau, parallel=False)
+    %timeit lk_fortran(source, target, tau, parallel=False)
+
+    print('\nFortran -- Parallel')
+    result_fortran_parallel = lk_fortran(source, target, tau, parallel=True, out=out)
+    %timeit lk_fortran(source, target, tau, parallel=True, out=out)
 
     print('\nSanity Checks')
     print('Numpy vs. Numexpr    ', np.allclose(result_numpy, result_numexpr))
     print('Numpy vs. Pure Numba ', np.allclose(result_numpy, result_pure_numba))
     print('Numpy vs. Mixed Numba', np.allclose(result_numpy, result_mixed_numba))
-    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran))
+    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran_serial))
+    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran_parallel))

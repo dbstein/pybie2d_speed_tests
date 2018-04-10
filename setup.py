@@ -26,7 +26,7 @@ setup(
     ext_modules =   [Extension( '_fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',
                         ],
-                        extra_f90_compile_args=['-O3',],
+                        extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
                         libraries=['gomp'],
                     )],
     packages=find_packages(),

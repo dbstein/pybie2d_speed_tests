@@ -1,7 +1,7 @@
 import numpy as np
-from _fortran_laplace_kernel import fortran_laplace_kernel
+from _fortran_laplace_kernel import fortran_laplace_kernel, fortran_laplace_kernel_parallel
 
-def lk_fortran(source, target, density):
+def lk_fortran(source, target, density, parallel=True, out=None):
     """
     2D Laplace Kernel (from source-->targets, no self-interaction testing)
 
@@ -15,4 +15,8 @@ def lk_fortran(source, target, density):
     s_y = source[1]
     t_x = target[0][:, np.newaxis]
     t_y = target[1][:, np.newaxis]
-    return fortran_laplace_kernel(s_x, s_y, t_x, t_y, density)
+    if parallel:
+        fortran_laplace_kernel_parallel(s_x, s_y, t_x, t_y, density, out)
+        return out
+    else:
+        return fortran_laplace_kernel(s_x, s_y, t_x, t_y, density)
