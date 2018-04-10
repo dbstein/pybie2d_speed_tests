@@ -25,11 +25,11 @@ def lk_pure_numba(source, target, density, qw, sd, output):
     scale = -0.5/np.pi
     for i in prange(N):
         sd[i] = scale*density[i]*qw[i]
-    for i in prange(N):
-    	for j in range(M):
+    for j in prange(M):
+        output[j] = 0.0
+    for j in prange(M):
+    	for i in range(N):
             output[j] += sd[i]*np.log(np.sqrt((s_x[i]-t_x[j])**2 + (s_y[i]-t_y[j])**2))
-    for j in range(M):
-        output[j] *= scale
 
 @njit(parallel=True)
 def distance_squared(source, target, d):
