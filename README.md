@@ -42,13 +42,13 @@ where NAME is a descriptive name for the system you are running on.
 # C Tests
 For now, mostly because I'm not really sure how to, I've yet to integrate the C++ code with the python system. Instead, simply compile the C code (e.g. using GCC):
 ```bash
-g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe -lm
+g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe
 ```
 or using ICC:
 ```bash
-icc -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe -lm
+icc -std=c++11 -O3 -xHost -qopenmp c_laplace_kernel.cpp -o test.exe
 ```
-Please either use the .exe extension since it is gitignored. Then simply run:
+Please use the .exe extension since its gitignored. Then simply run:
 ```bash
 ./test.exe > output/c_laplace_kernel_NAME.txt
 ```
