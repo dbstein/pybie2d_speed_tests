@@ -22,15 +22,14 @@ The speed of the function calls will depend on the users machine and underlying 
 ## Running the speed tests
 
 # Python and Fortran tests
-To build and install the python and Fortran code using your default fortran compiler, simply execute:
-
+To build and install using the Intel Fortran compiler, execute, e.g.:
 ```bash
+python setup.py build --fcompiler=intelem
 pip install .
 ```
 
-To build and install using an alternative Fortran compiler, execute, e.g.:
+To build and install the python and Fortran code using your default fortran compiler, first modify line 30 of setup.py to use the relevant flags for your compiler and then execute:
 ```bash
-python setup.py build --fcompiler=intelem
 pip install .
 ```
 
@@ -64,9 +63,9 @@ module load gcc/7.3.0
 module load python
 python setup.py build --fcompiler=intelem
 ipython drivers/laplace_kernel_tests.ipy > output/laplace_kernel_stein_workstation_12_cores_module_numpy.txt
-g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test -lm
+g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test
 ./test > output/c_laplace_kernel_stein_workstation_12_cores_gcc.txt
-icc -std=c++11 -O3 -xHost -qopenmp c_laplace_kernel.cpp -o test -lm
+icc -std=c++11 -O3 -xHost -qopenmp c_laplace_kernel.cpp -o test
 ./test > output/c_laplace_kernel_stein_workstation_12_cores_icc.txt
 ```
 
