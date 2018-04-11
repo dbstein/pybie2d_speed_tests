@@ -42,31 +42,31 @@ where NAME is a descriptive name for the system you are running on.
 # C Tests
 For now, mostly because I'm not really sure how to, I've yet to integrate the C++ code with the python system. Instead, simply compile the C code (e.g. using GCC):
 ```bash
-g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test -lm
+g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe -lm
 ```
 or using ICC:
 ```bash
-icc -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test -lm
+icc -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe -lm
 ```
-Then simply run:
+Please either use the .exe extension since it is gitignored. Then simply run:
 ```bash
-./test > output/c_laplace_kernel_NAME.txt
+./test.exe > output/c_laplace_kernel_NAME.txt
 ```
 where again, NAME is a descriptive name for the system you are running on.  For my own reference, the results in the output folder now were created on my Simons workstation using the commands:
 ```bash
 source activate idp_3
+module load intel/compiler
 python setup.py build --fcompiler=intelem
+pip install .
 ipython drivers/laplace_kernel_tests.ipy > output/laplace_kernel_stein_workstation_12_cores_intel_numpy.txt
-pip uninstall pyBIE2D_Speed_Tests
 source deactivate
+cd src
+icc -std=c++11 -O3 -xHost -qopenmp c_laplace_kernel.cpp -o test.exe
+./test.exe > ../output/c_laplace_kernel_stein_workstation_12_cores_icc.txt
+module remove intel/compiler
 module load gcc/7.3.0
-module load python
-python setup.py build --fcompiler=intelem
-ipython drivers/laplace_kernel_tests.ipy > output/laplace_kernel_stein_workstation_12_cores_module_numpy.txt
-g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test
-./test > output/c_laplace_kernel_stein_workstation_12_cores_gcc.txt
-icc -std=c++11 -O3 -xHost -qopenmp c_laplace_kernel.cpp -o test
-./test > output/c_laplace_kernel_stein_workstation_12_cores_icc.txt
+g++ -std=c++11 -O3 -march=native -fopenmp c_laplace_kernel.cpp -o test.exe
+./test.exe > ../output/c_laplace_kernel_stein_workstation_12_cores_gcc.txt
 ```
 
 
