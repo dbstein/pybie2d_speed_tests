@@ -5,20 +5,14 @@ from pyBIE2D_Speed_Tests.laplace_kernel.lk_numexpr import lk_numexpr
 from pyBIE2D_Speed_Tests.laplace_kernel.lk_numba import lk_pure_numba, lk_mixed_numba
 from pyBIE2D_Speed_Tests.laplace_kernel.lk_fortran import lk_fortran
 import numexpr as ne
-# import ctypes
-# mkl_rt = ctypes.CDLL('libmkl_rt.so')
-# def set_num_threads(threads=None):
-#     if threads is None:
-#         threads = mkl_rt.mkl_get_max_threads()
-#     mkl_rt.mkl_set_num_threads(ctypes.byref(ctypes.c_int(threads)))
 
 """
 Rigorous speed test of different kernel code for computing the Laplace greens
 kernel in 2 dimensions
 """
 
-NS = (100, 1000, 10000)
-MS = (200, 1000, 10000)
+NS = (100, 1000, 10000, 25000)
+MS = (100, 1000, 10000, 25000)
 
 for N, M in zip(NS, MS):
 
@@ -43,17 +37,19 @@ for N, M in zip(NS, MS):
     print('\nNumexpr -- One Core')
     ne.set_num_threads(1)
     ne.set_vml_num_threads(1)
-    result_numexpr = lk_numexpr(source, target, tau, D)
+    result_numexpr1 = lk_numexpr(source, target, tau, D)
     %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumexpr -- Max Cores')
     ne.set_num_threads(ne.detect_number_of_cores())
     ne.set_vml_num_threads(1)
+    result_numexpr2 = lk_numexpr(source, target, tau, D)
     %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumexpr -- Max VML Cores')
     ne.set_num_threads(1)
     ne.set_vml_num_threads(ne.detect_number_of_cores())
+    result_numexpr3 = lk_numexpr(source, target, tau, D)
     %timeit lk_numexpr(source, target, tau, D)
 
     print('\nNumba -- Pure')
@@ -75,8 +71,10 @@ for N, M in zip(NS, MS):
     %timeit lk_fortran(source, target, tau, parallel=True, out=out)
 
     print('\nSanity Checks')
-    print('Numpy vs. Numexpr    ', np.allclose(result_numpy, result_numexpr))
-    print('Numpy vs. Pure Numba ', np.allclose(result_numpy, result_pure_numba))
-    print('Numpy vs. Mixed Numba', np.allclose(result_numpy, result_mixed_numba))
-    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran_serial))
-    print('Numpy vs. Fortran    ', np.allclose(result_numpy, result_fortran_parallel))
+    print('Numpy vs. Numexpr 1        ', np.allclose(result_numpy, result_numexpr1))
+    print('Numpy vs. Numexpr 2        ', np.allclose(result_numpy, result_numexpr2))
+    print('Numpy vs. Numexpr 3        ', np.allclose(result_numpy, result_numexpr3))
+    print('Numpy vs. Pure Numba       ', np.allclose(result_numpy, result_pure_numba))
+    print('Numpy vs. Mixed Numba      ', np.allclose(result_numpy, result_mixed_numba))
+    print('Numpy vs. Fortran, Serial  ', np.allclose(result_numpy, result_fortran_serial))
+    print('Numpy vs. Fortran, Parallel', np.allclose(result_numpy, result_fortran_parallel))

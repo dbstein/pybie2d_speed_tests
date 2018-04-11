@@ -37,7 +37,7 @@ subroutine fortran_laplace_kernel_parallel(n,sx,sy,m,tx,ty,tau,out)
     scale = -0.25_dp/(4.0_dp*atan(1.0_dp))
 
     out(:) = 0.0_dp
-    !$OMP parallel do shared(sx, tx, sy, ty, out) private(d)
+    !$OMP parallel do shared(sx, tx, sy, ty, out) private(d, i)
     do j = 1, m
         do i = 1, n
             d = (sx(i)-tx(j))**2 + (sy(i)-ty(j))**2
