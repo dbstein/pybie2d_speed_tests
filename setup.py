@@ -31,5 +31,5 @@ setup(
                         libraries=['gomp'],
                     )],
     packages=find_packages(),
-    install_requires=[,],
+    install_requires=[],
 )
