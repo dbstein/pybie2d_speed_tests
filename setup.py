@@ -17,7 +17,7 @@ f_module = Extension( 'fortran_laplace_kernel',
                     )
 
 c_module = Extension( 'c_laplace_kernel',
-                        ['src/c_laplace_kernel.cpp','src/Timer.hpp','src/AlignedMemory.hpp'],
+                        ['src/c_laplace_kernel.cpp'],#,'src/Timer.hpp','src/AlignedMemory.hpp'],
                         extra_compile_args=['-std=c++11', '-O3', '-fopenmp', '-march=native'],
                         # extra_compile_args=['-std=c++11', '-qopenmp', '-O3', '-xHost'],
                         libraries=['gomp'],
@@ -37,7 +37,7 @@ setup(
         'License :: Apache 2',
         'Programming Language :: Python :: 2',
     ],
-    ext_modules =   [f_module, c_module],
+    ext_modules=[f_module, c_module],
     packages=find_packages(),
     install_requires=[],
 )
