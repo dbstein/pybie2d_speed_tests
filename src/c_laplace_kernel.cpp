@@ -42,7 +42,7 @@ void test_kernel(int npts) {
     for (int i = 0; i < npts; i++) {
         tx = tPtr[2*i];
         ty = tPtr[2*i + 1];
-        double trgValue = 0;
+        trgValue = 0;
         for (int j = 0; j < npts; j++) {
             sx = sPtr[2*j];
             sy = sPtr[2*j + 1];
@@ -70,6 +70,8 @@ void test_kernel_parallel(int npts) {
     double *tPtr = new double[2 * npts]; // target coordinates
     double *fPtr = new double[npts];     // force
     double *vPtr = new double[npts];     // velocity
+    double tx, ty, trgValue, sx, sy, ff, rx, ry, rnorm2, logr2;
+
     for (int i = 0; i < npts; i++){
         fPtr[i] = 1;
         vPtr[i] = 0;
@@ -84,19 +86,19 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
-    #pragma omp parallel for
+    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,trgValue)
     for (int i = 0; i < npts; i++) {
-        const double tx = tPtr[2*i];
-        const double ty = tPtr[2*i + 1];
-        double trgValue = 0;
+        tx = tPtr[2*i];
+        ty = tPtr[2*i + 1];
+        trgValue = 0;
         for (int j = 0; j < npts; j++) {
-            const double sx = sPtr[2*j];
-            const double sy = sPtr[2*j + 1];
-            const double ff = fPtr[j];
-            const double rx = (tx - sx);
-            const double ry = (ty - sy);
-            const double rnorm2 = rx * rx + ry * ry;
-            const double logr2 = Log(rnorm2);
+            sx = sPtr[2*j];
+            sy = sPtr[2*j + 1];
+            ff = fPtr[j];
+            rx = (tx - sx);
+            ry = (ty - sy);
+            rnorm2 = rx * rx + ry * ry;
+            logr2 = Log(rnorm2);
             trgValue += ff*logr2;
         }
         vPtr[i] += trgValue*factor4pi;
