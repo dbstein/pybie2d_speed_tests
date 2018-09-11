@@ -11,17 +11,17 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 f_module = Extension( 'fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',],
-                        extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
-                        # extra_f90_compile_args=['-O3', '-qopenmp', '-xHost'],
+                        # extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
+                        extra_f90_compile_args=['-O3', '-qopenmp', '-xHost'],
                         libraries=['gomp'],
                     )
 
-c_module = Extension( 'c_laplace_kernel',
-                        ['src/c_laplace_kernel.cpp'],#,'src/Timer.hpp','src/AlignedMemory.hpp'],
-                        extra_compile_args=['-std=c++11', '-O3', '-fopenmp', '-march=native'],
-                        # extra_compile_args=['-std=c++11', '-qopenmp', '-O3', '-xHost'],
-                        libraries=['gomp'],
-                    )
+# c_module = Extension( 'c_laplace_kernel',
+#                         ['src/c_laplace_kernel.cpp'],#,'src/Timer.hpp','src/AlignedMemory.hpp'],
+#                         extra_compile_args=['-static', '-std=c++11', '-O3', '-fopenmp', '-march=native'],
+#                         # extra_compile_args=['-std=c++11', '-qopenmp', '-O3', '-xHost'],
+#                         libraries=['gomp'],
+#                     )
 
 setup(
     name='pybie2d_Speed_Tests',
@@ -37,7 +37,7 @@ setup(
         'License :: Apache 2',
         'Programming Language :: Python :: 2',
     ],
-    ext_modules=[f_module, c_module],
+    ext_modules=[f_module],
     packages=find_packages(),
     install_requires=[],
 )
