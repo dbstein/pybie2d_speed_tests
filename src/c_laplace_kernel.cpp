@@ -128,11 +128,9 @@ int main() {
     test_kernel(100);
     test_kernel(1000);
     test_kernel(10000);
-    test_kernel(25000);
     printf("\n----- Testing parallel versions -----\n");
     test_kernel_parallel(100);
     test_kernel_parallel(1000);
     test_kernel_parallel(10000);
-    test_kernel_parallel(25000);
     return 0;
 }
