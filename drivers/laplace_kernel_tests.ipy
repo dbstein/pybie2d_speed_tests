@@ -34,9 +34,10 @@ for N, M in zip(NS, MS):
     result_numpy = lk_numpy(source, target, tau)
     %timeit lk_numpy(source, target, tau)
 
-    print('\nBasic numpy, loop')
-    result_numpy_loop = lk_numpy_loop(source, target, tau)
-    %timeit lk_numpy_loop(source, target, tau)
+    if N <= 1000:
+        print('\nBasic numpy, loop')
+        result_numpy_loop = lk_numpy_loop(source, target, tau)
+        %timeit lk_numpy_loop(source, target, tau)
 
     print('\nNumexpr -- One Core')
     ne.set_num_threads(1)
