@@ -32,6 +32,5 @@ def lk_numpy_loop(source, target, density):
     for j in range(M):
         dx = source[0] - target[0,j]
         dy = source[1] - target[1,j]
-        d = np.log(dx**2 + dy**2)
-        out += d.dot(sw)
+        out += np.log(dx**2 + dy**2)*sw
     return out
