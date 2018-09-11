@@ -1,6 +1,6 @@
 import numpy as np
 import pybie2d_speed_tests as ST
-from pybie2d_speed_tests.laplace_kernel.lk_numpy import lk_numpy
+from pybie2d_speed_tests.laplace_kernel.lk_numpy import lk_numpy, lk_numpy_loop
 from pybie2d_speed_tests.laplace_kernel.lk_numexpr import lk_numexpr
 from pybie2d_speed_tests.laplace_kernel.lk_numba import lk_pure_numba
 from pybie2d_speed_tests.laplace_kernel.lk_fortran import lk_fortran
@@ -33,6 +33,10 @@ for N, M in zip(NS, MS):
     print('\nBasic numpy')
     result_numpy = lk_numpy(source, target, tau)
     %timeit lk_numpy(source, target, tau)
+
+    print('\nBasic numpy, loop')
+    result_numpy_loop = lk_numpy_loop(source, target, tau)
+    %timeit lk_numpy_loop(source, target, tau)
 
     print('\nNumexpr -- One Core')
     ne.set_num_threads(1)

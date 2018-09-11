@@ -134,3 +134,11 @@ int main() {
     test_kernel_parallel(10000);
     return 0;
 }
+
+/*
+Compiling...
+with GCC:
+g++ c_laplace_kernel.cpp -fopenmp -O3 -march=native -o test_gcc.exe
+with ICC:
+icc c_laplace_kernel.cpp -std=c++11 -qopenmp -O3 -xHost -o test_icc.exe
+*/
