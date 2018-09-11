@@ -86,7 +86,7 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
-    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,trgValue)
+    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2)
     for (int i = 0; i < npts; i++) {
         tx = tPtr[2*i];
         ty = tPtr[2*i + 1];
