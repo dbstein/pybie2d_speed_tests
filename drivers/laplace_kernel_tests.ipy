@@ -1,9 +1,9 @@
 import numpy as np
-import pyBIE2D_Speed_Tests as ST
-from pyBIE2D_Speed_Tests.laplace_kernel.lk_numpy import lk_numpy
-from pyBIE2D_Speed_Tests.laplace_kernel.lk_numexpr import lk_numexpr
-from pyBIE2D_Speed_Tests.laplace_kernel.lk_numba import lk_pure_numba, lk_mixed_numba
-from pyBIE2D_Speed_Tests.laplace_kernel.lk_fortran import lk_fortran
+import pybie2d_speed_tests as ST
+from pybie2d_speed_tests.laplace_kernel.lk_numpy import lk_numpy
+from pybie2d_speed_tests.laplace_kernel.lk_numexpr import lk_numexpr
+from pybie2d_speed_tests.laplace_kernel.lk_numba import lk_pure_numba
+from pybie2d_speed_tests.laplace_kernel.lk_fortran import lk_fortran
 import numexpr as ne
 
 """
@@ -11,8 +11,8 @@ Rigorous speed test of different kernel code for computing the Laplace greens
 kernel in 2 dimensions
 """
 
-NS = (100, 1000, 10000, 25000)
-MS = (100, 1000, 10000, 25000)
+NS = (100, 1000, 10000)
+MS = (100, 1000, 10000)
 
 for N, M in zip(NS, MS):
 
@@ -57,11 +57,6 @@ for N, M in zip(NS, MS):
     result_pure_numba = out.copy()
     %timeit lk_pure_numba(source, target, tau, sd, out)
 
-    print('\nNumba -- Mixed')
-    lk_mixed_numba(source, target, tau, D, out)
-    result_mixed_numba = out.copy()
-    %timeit lk_mixed_numba(source, target, tau, D, out)
-
     print('\nFortran -- Serial')
     result_fortran_serial = lk_fortran(source, target, tau, parallel=False)
     %timeit lk_fortran(source, target, tau, parallel=False)
@@ -75,6 +70,5 @@ for N, M in zip(NS, MS):
     print('Numpy vs. Numexpr 2        ', np.allclose(result_numpy, result_numexpr2))
     print('Numpy vs. Numexpr 3        ', np.allclose(result_numpy, result_numexpr3))
     print('Numpy vs. Pure Numba       ', np.allclose(result_numpy, result_pure_numba))
-    print('Numpy vs. Mixed Numba      ', np.allclose(result_numpy, result_mixed_numba))
     print('Numpy vs. Fortran, Serial  ', np.allclose(result_numpy, result_fortran_serial))
     print('Numpy vs. Fortran, Parallel', np.allclose(result_numpy, result_fortran_parallel))

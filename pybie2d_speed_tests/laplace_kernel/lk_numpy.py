@@ -13,5 +13,4 @@ def lk_numpy(source, target, density):
     dy = source[1] - target[1][:, np.newaxis]
     d = np.log(dx**2 + dy**2)
     scale = -0.25/np.pi
-    sw = scale*density
-    return d.dot(sw)
+    return d.dot(density*scale)

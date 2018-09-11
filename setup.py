@@ -10,9 +10,9 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='pyBIE2D_Speed_Tests',
+    name='pybie2D_Speed_Tests',
     version='0.0.1',
-    description='Speed Tests for Boundary integral equation tools in 2D',
+    description='Speed Tests for figuring out how to implement pybie2D',
     long_description=long_description,
     url='https://bitbucket.org/dstein_flatiron/pybie2d_speed_tests/',
     author='David Stein',
@@ -26,10 +26,10 @@ setup(
     ext_modules =   [Extension( '_fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',
                         ],
-                        # extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
-                        extra_f90_compile_args=['-O3', '-qopenmp', '-xHost'],
+                        extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
+                        # extra_f90_compile_args=['-O3', '-qopenmp', '-xHost'],
                         libraries=['gomp'],
                     )],
     packages=find_packages(),
-    install_requires=['numpy', 'numexpr', 'numba'],
+    install_requires=[,],
 )

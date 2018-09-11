@@ -19,4 +19,4 @@ def lk_numexpr(source, target, density, D):
     t_y = target[1][:, np.newaxis]
     ne.evaluate('log((s_x-t_x)**2 + (s_y-t_y)**2)', out=D)
     scale = -0.25/np.pi
-    return np.dot(D, density*scale)
+    return D.dot(density*scale)
