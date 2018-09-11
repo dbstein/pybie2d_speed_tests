@@ -11,6 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 environ['CC'] = 'icc'
 environ['CXX'] = 'icpc'
+environ['FC'] = 'ifort'
 environ['FC77'] = 'ifort'
 environ['FC90'] = 'ifort'
 
