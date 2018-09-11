@@ -9,14 +9,14 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-f_module = Extension( '_fortran_laplace_kernel',
+f_module = Extension( 'fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',],
                         extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
                         # extra_f90_compile_args=['-O3', '-qopenmp', '-xHost'],
                         libraries=['gomp'],
                     )
 
-c_module = Extension( '_c_laplace_kernel',
+c_module = Extension( 'c_laplace_kernel',
                         ['src/c_laplace_kernel.cpp','src/Timer.hpp','src/AlignedMemory.hpp'],
                         extra_compile_args=['-std=c++11', '-O3', '-fopenmp', '-march=native'],
                         # extra_compile_args=['-std=c++11', '-qopenmp', '-O3', '-xHost'],
