@@ -1,1 +1,1 @@
-from .. import _fortran_laplace_kernel
+from .. import fortran_laplace_kernel
