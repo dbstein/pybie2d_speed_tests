@@ -9,10 +9,10 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-os.environ["CC"] = "icc" 
-os.environ["CXX"] = "icpc"
-os.environ["FC77"] = "ifort"
-os.environ["FC90"] = "ifort"
+environ['CC'] = 'icc'
+environ['CXX'] = 'icpc'
+environ['FC77'] = 'ifort'
+environ['FC90'] = 'ifort'
 
 f_module = Extension( 'fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',],
