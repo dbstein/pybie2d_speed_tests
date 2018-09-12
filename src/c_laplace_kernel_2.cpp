@@ -39,26 +39,28 @@ void test_kernel(int npts) {
     Timer timer;
     timer.start();
 
-    for (int i = 0; i < npts; i++) {
-        tx = tPtr[2*i];
-        ty = tPtr[2*i + 1];
-        trgValue = 0;
-        for (int j = 0; j < npts; j++) {
-            sx = sPtr[2*j];
-            sy = sPtr[2*j + 1];
-            ff = fPtr[j];
-            rx = (tx - sx);
-            ry = (ty - sy);
-            rnorm2 = rx * rx + ry * ry;
-            logr2 = Log(rnorm2);
-            trgValue += ff*logr2;
+    for(int k=0; k<100; k++){
+        for (int i = 0; i < npts; i++) {
+            tx = tPtr[2*i];
+            ty = tPtr[2*i + 1];
+            trgValue = 0;
+            for (int j = 0; j < npts; j++) {
+                sx = sPtr[2*j];
+                sy = sPtr[2*j + 1];
+                ff = fPtr[j];
+                rx = (tx - sx);
+                ry = (ty - sy);
+                rnorm2 = rx * rx + ry * ry;
+                logr2 = Log(rnorm2);
+                trgValue += ff*logr2;
+            }
+            vPtr[i] += trgValue*factor4pi;
         }
-        vPtr[i] += trgValue*factor4pi;
     }
 
     timer.stop();
     timer.dump();
-    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime());
+    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/100);
     delete[] sPtr;
     delete[] tPtr;
     delete[] fPtr;
