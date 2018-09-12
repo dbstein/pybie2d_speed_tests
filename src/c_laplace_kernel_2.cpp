@@ -87,7 +87,7 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
-    for(int k=0; k<10; k++){
+    for(int k=0; k<100; k++){
 
     #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,i,j)
     for (i = 0; i < npts; i++) {
