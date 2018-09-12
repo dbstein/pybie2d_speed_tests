@@ -177,11 +177,11 @@ int main(int reps) {
     ns[2] = 10000
     printf("\n----- Testing serial versions -----\n");
     for (int i=0; i<3; i++){
-        test_kernel(ns[i], reps)
+        test_kernel(ns[i], reps);
     }
     printf("\n----- Testing parallel versions -----\n");
     for (int i=0; i<3; i++){
-        test_kernel_parallel(ns[i], reps)
+        test_kernel_parallel(ns[i], reps);
     }
     printf("\n----- Testing parallel versions -----\n");
     for (int i=0; i<3; i++){
