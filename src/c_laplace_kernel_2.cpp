@@ -71,12 +71,13 @@ void test_kernel_parallel(int npts) {
     double *fPtr = new double[npts];     // force
     double *vPtr = new double[npts];     // velocity
     double tx, ty, trgValue, sx, sy, ff, rx, ry, rnorm2, logr2;
+    int i, j;
 
-    for (int i = 0; i < npts; i++){
+    for (i = 0; i < npts; i++){
         fPtr[i] = 1;
         vPtr[i] = 0;
     }
-    for (int i = 0; i < 2*npts; i++){
+    for (i = 0; i < 2*npts; i++){
         sPtr[i] = i;
         tPtr[i] = i+0.5;
     }
@@ -86,12 +87,12 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
-    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2)
-    for (int i = 0; i < npts; i++) {
+    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,i,j)
+    for (i = 0; i < npts; i++) {
         tx = tPtr[2*i];
         ty = tPtr[2*i + 1];
         trgValue = 0;
-        for (int j = 0; j < npts; j++) {
+        for (j = 0; j < npts; j++) {
             sx = sPtr[2*j];
             sy = sPtr[2*j + 1];
             ff = fPtr[j];

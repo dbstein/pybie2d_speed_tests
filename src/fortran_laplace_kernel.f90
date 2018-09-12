@@ -12,6 +12,7 @@ subroutine fortran_laplace_kernel(n,sx,sy,m,tx,ty,tau,out)
     scale = -0.25_dp/(4.0_dp*atan(1.0_dp))
 
     out(:) = 0.0_dp
+    !$omp simd
     do j = 1, m
         do i = 1, n
             d = (sx(i)-tx(j))**2 + (sy(i)-ty(j))**2
@@ -44,6 +45,7 @@ subroutine fortran_laplace_kernel_parallel(n,sx,sy,m,tx,ty,tau,out)
             d = (sx(i)-tx(j))**2 + (sy(i)-ty(j))**2
             out(j) = out(j) + tau(i)*log(d)
         end do
+        !$omp end simd
     end do
     !$OMP end parallel do
     out(:) = out(:)*scale
