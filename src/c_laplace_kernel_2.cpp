@@ -183,14 +183,17 @@ int main() {
     timer_helper = 0;
     for(int k=0; k<100; k++){
         timer_helper += test_kernel_parallel2(100);
+    }
     printf("    Time for n=%ld is %lf ms\n", 100, 1000*timer_helper/100);
     timer_helper = 0;
     for(int k=0; k<100; k++){
         timer_helper += test_kernel_parallel2(1000);
+    }
     printf("    Time for n=%ld is %lf ms\n", 1000, 1000*timer_helper/100);
     timer_helper = 0;
     for(int k=0; k<100; k++){
         timer_helper += test_kernel_parallel2(10000);
+    }
     printf("    Time for n=%ld is %lf ms\n", 10000, 1000*timer_helper/100);
     return 0;
 }
