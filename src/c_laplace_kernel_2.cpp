@@ -118,7 +118,7 @@ void test_kernel_parallel(int npts) {
     delete[] vPtr;
 }
 
-int test_kernel_parallel2(int npts) {
+double test_kernel_parallel2(int npts) {
     double *sPtr = new double[2 * npts]; // source coordinates
     double *tPtr = new double[2 * npts]; // target coordinates
     double *fPtr = new double[npts];     // force
@@ -170,7 +170,7 @@ int test_kernel_parallel2(int npts) {
 }
 
 int main() {
-    int timer_helper;
+    double timer_helper;
     printf("\n----- Testing serial versions -----\n");
     test_kernel(100);
     test_kernel(1000);
