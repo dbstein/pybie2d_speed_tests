@@ -87,6 +87,8 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
+    for(int k=0; k<10; k++){
+
     #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,i,j)
     for (i = 0; i < npts; i++) {
         tx = tPtr[2*i];
@@ -105,9 +107,11 @@ void test_kernel_parallel(int npts) {
         vPtr[i] += trgValue*factor4pi;
     }
 
+    }
+
     timer.stop();
     timer.dump();
-    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime());
+    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/10);
     delete[] sPtr;
     delete[] tPtr;
     delete[] fPtr;
