@@ -111,7 +111,7 @@ void test_kernel_parallel(int npts) {
 
     timer.stop();
     timer.dump();
-    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/10);
+    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/100);
     delete[] sPtr;
     delete[] tPtr;
     delete[] fPtr;
