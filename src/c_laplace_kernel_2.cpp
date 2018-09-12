@@ -182,7 +182,7 @@ int main() {
     printf("\n----- Testing parallel versions -----\n");
     timer_helper = 0;
     for(int k=0; k<100; k++){
-        timer_helper += 1.0;
+        timer_helper += test_kernel_parallel2(100);
     }
     printf("    Time for n=%ld is %lf ms\n", 100, 1000*timer_helper/100);
     timer_helper = 0;
