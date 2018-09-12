@@ -18,7 +18,7 @@ inline double Power(double x, double y) { return std::pow(x, y); }
 
 inline double Log(double x) { return std::log(x); }
 
-void test_kernel(int npts) {
+void test_kernel(int npts, int reps) {
     double *sPtr = new double[2 * npts]; // source coordinates
     double *tPtr = new double[2 * npts]; // target coordinates
     double *fPtr = new double[npts];     // force
@@ -39,7 +39,7 @@ void test_kernel(int npts) {
     Timer timer;
     timer.start();
 
-    for(int k=0; k<100; k++){
+    for(int k=0; k<reps; k++){
         for (int i = 0; i < npts; i++) {
             tx = tPtr[2*i];
             ty = tPtr[2*i + 1];
@@ -60,14 +60,14 @@ void test_kernel(int npts) {
 
     timer.stop();
     timer.dump();
-    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/100);
+    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/reps);
     delete[] sPtr;
     delete[] tPtr;
     delete[] fPtr;
     delete[] vPtr;
 }
 
-void test_kernel_parallel(int npts) {
+void test_kernel_parallel(int npts, int reps) {
     double *sPtr = new double[2 * npts]; // source coordinates
     double *tPtr = new double[2 * npts]; // target coordinates
     double *fPtr = new double[npts];     // force
@@ -89,31 +89,29 @@ void test_kernel_parallel(int npts) {
     Timer timer;
     timer.start();
 
-    for(int k=0; k<100; k++){
-
-    #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,i,j)
-    for (i = 0; i < npts; i++) {
-        tx = tPtr[2*i];
-        ty = tPtr[2*i + 1];
-        trgValue = 0;
-        for (j = 0; j < npts; j++) {
-            sx = sPtr[2*j];
-            sy = sPtr[2*j + 1];
-            ff = fPtr[j];
-            rx = (tx - sx);
-            ry = (ty - sy);
-            rnorm2 = rx * rx + ry * ry;
-            logr2 = Log(rnorm2);
-            trgValue += ff*logr2;
+    for(int k=0; k<reps; k++){
+        #pragma omp parallel for private(tx,ty,trgValue,sx,sy,ff,rx,ry,rnorm2,logr2,i,j)
+        for (i = 0; i < npts; i++) {
+            tx = tPtr[2*i];
+            ty = tPtr[2*i + 1];
+            trgValue = 0;
+            for (j = 0; j < npts; j++) {
+                sx = sPtr[2*j];
+                sy = sPtr[2*j + 1];
+                ff = fPtr[j];
+                rx = (tx - sx);
+                ry = (ty - sy);
+                rnorm2 = rx * rx + ry * ry;
+                logr2 = Log(rnorm2);
+                trgValue += ff*logr2;
+            }
+            vPtr[i] += trgValue*factor4pi;
         }
-        vPtr[i] += trgValue*factor4pi;
-    }
-
     }
 
     timer.stop();
     timer.dump();
-    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/100);
+    printf("    Time for n=%ld is %lf ms\n", npts, 1000*timer.getTime()/reps);
     delete[] sPtr;
     delete[] tPtr;
     delete[] fPtr;
@@ -171,32 +169,28 @@ double test_kernel_parallel2(int npts) {
     return timer.getTime();
 }
 
-int main() {
+int main(int reps) {
     double timer_helper;
+    int *ns = new int[npts];
+    ns[0] = 100
+    ns[1] = 1000
+    ns[2] = 10000
     printf("\n----- Testing serial versions -----\n");
-    test_kernel(100);
-    test_kernel(1000);
-    test_kernel(10000);
+    for (int i=0; i<3; i++){
+        test_kernel(ns[i], reps)
+    }
     printf("\n----- Testing parallel versions -----\n");
-    test_kernel_parallel(100);
-    test_kernel_parallel(1000);
-    test_kernel_parallel(10000);
+    for (int i=0; i<3; i++){
+        test_kernel_parallel(ns[i], reps)
+    }
     printf("\n----- Testing parallel versions -----\n");
-    timer_helper = 0;
-    for(int k=0; k<100; k++){
-        timer_helper += test_kernel_parallel2(100);
+    for (int i=0; i<3; i++){
+        timer_helper = 0;
+        for(int k=0; k<reps; k++){
+            timer_helper += test_kernel_parallel2(ns[i], reps);
+        }
+        printf("    Time for n=%ld is %lf ms\n", ns[i], 1000*timer_helper/reps);
     }
-    printf("    Time for n=%ld is %lf ms\n", 100, 1000*timer_helper/100);
-    timer_helper = 0;
-    for(int k=0; k<100; k++){
-        timer_helper += test_kernel_parallel2(1000);
-    }
-    printf("    Time for n=%ld is %lf ms\n", 1000, 1000*timer_helper/100);
-    timer_helper = 0;
-    for(int k=0; k<100; k++){
-        timer_helper += test_kernel_parallel2(10000);
-    }
-    printf("    Time for n=%ld is %lf ms\n", 10000, 1000*timer_helper/100);
     return 0;
 }
 
