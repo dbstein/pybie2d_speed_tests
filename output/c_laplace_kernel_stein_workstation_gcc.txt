@@ -1,0 +1,18 @@
+
+Number of Threads: 24
+
+----- Testing serial versions -----
+    Time for n=100 is 0.254444 ms
+    Time for n=1000 is 26.489563 ms
+    Time for n=10000 is 2540.226700 ms
+
+----- Testing parallel versions -----
+    Time for n=100 is 0.066441 ms
+    Time for n=1000 is 1.713144 ms
+    Time for n=10000 is 163.121700 ms
+
+----- Testing parallel versions, half cores -----
+    Time for n=100 is 0.034134 ms
+    Time for n=1000 is 2.338120 ms
+    Time for n=10000 is 218.525500 ms
+

@@ -1,0 +1,97 @@
+]0;IPython: repos/pybie2d_speed_tests
+----- 2D Laplace Kernel Source-->Target Timing Tests -----
+
+Running for 100 source points and 100 target points.
+
+Running basic numpy (untimed, for testing solution)
+-- Numexpr --
+121 µs ± 2.82 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+All close?  True
+-- Numba 1 --
+61.5 µs ± 408 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+All close?  True
+-- Numba 2 --
+35 µs ± 863 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+All close?  True
+-- Fortran S --
+344 µs ± 40.8 ns per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+All close?  True
+-- Fortran P --
+37.6 µs ± 9.86 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+All close?  True
+
+Running for 1000 source points and 1000 target points.
+
+Running basic numpy (untimed, for testing solution)
+-- Numexpr --
+1.53 ms ± 18.8 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+All close?  True
+-- Numba 1 --
+2.61 ms ± 30.6 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+All close?  True
+-- Numba 2 --
+371 µs ± 8.07 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+All close?  True
+-- Fortran S --
+32.7 ms ± 364 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Fortran P --
+3.78 ms ± 485 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+All close?  True
+
+Running for 10000 source points and 10000 target points.
+
+Running basic numpy (untimed, for testing solution)
+-- Numexpr --
+153 ms ± 3.01 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Numba 1 --
+216 ms ± 9.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Numba 2 --
+27.7 ms ± 339 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Fortran S --
+3.25 s ± 1.02 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Fortran P --
+200 ms ± 5.11 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+
+Running for 100 source points and 1000000 target points.
+
+Running basic numpy (untimed, for testing solution)
+-- Numexpr --
+172 ms ± 2.53 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Numba 1 --
+206 ms ± 9.26 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Numba 2 --
+41.7 ms ± 2.3 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Fortran S --
+3.25 s ± 733 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Fortran P --
+253 ms ± 60.6 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+
+Running for 1000000 source points and 100 target points.
+
+Running basic numpy (untimed, for testing solution)
+-- Numexpr --
+158 ms ± 2.34 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Numba 1 --
+337 ms ± 17.6 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Numba 2 --
+82.4 ms ± 440 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+All close?  True
+-- Fortran S --
+3.28 s ± 1.08 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
+-- Fortran P --
+232 ms ± 5.22 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+All close?  True
