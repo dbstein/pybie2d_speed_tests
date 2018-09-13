@@ -9,12 +9,6 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-environ['CC'] = 'icc'
-environ['CXX'] = 'icpc'
-environ['FC'] = 'ifort'
-environ['FC77'] = 'ifort'
-environ['FC90'] = 'ifort'
-
 f_module = Extension( 'fortran_laplace_kernel',
                         ['src/fortran_laplace_kernel.f90',],
                         # extra_f90_compile_args=['-O3', '-fopenmp', '-march=native'],
@@ -43,7 +37,7 @@ setup(
         'License :: Apache 2',
         'Programming Language :: Python :: 2',
     ],
-    ext_modules=[f_module],
+    ext_modules=[f_module,],
     packages=find_packages(),
     install_requires=[],
 )

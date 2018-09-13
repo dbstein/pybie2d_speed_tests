@@ -1,79 +1,52 @@
+import os
+import sys
 import numpy as np
 import pybie2d_speed_tests as ST
-from pybie2d_speed_tests.laplace_kernel.lk_numpy import lk_numpy, lk_numpy_loop
+from pybie2d_speed_tests.laplace_kernel.lk_numpy import lk_numpy
 from pybie2d_speed_tests.laplace_kernel.lk_numexpr import lk_numexpr
-from pybie2d_speed_tests.laplace_kernel.lk_numba import lk_pure_numba
-from pybie2d_speed_tests.laplace_kernel.lk_fortran import lk_fortran
-import numexpr as ne
+from pybie2d_speed_tests.laplace_kernel.lk_numba import lk_numba1
+from pybie2d_speed_tests.laplace_kernel.lk_numba import lk_numba2
+from pybie2d_speed_tests.laplace_kernel.lk_fortran import lk_fortran_serial
+from pybie2d_speed_tests.laplace_kernel.lk_fortran import lk_fortran_parallel
 
 """
 Rigorous speed test of different kernel code for computing the Laplace greens
 kernel in 2 dimensions
 """
 
-NS = (100, 1000, 10000)
-MS = (100, 1000, 10000)
+base_function  = lk_numpy
+# Test Setup goes here:
+source_numbers = [100, 1000, 10000, 100,      int(1e6) ]
+target_numbers = [100, 1000, 10000, int(1e6), 100      ]
+test_functions = [lk_numexpr, lk_numba1, lk_numba2, lk_fortran_serial, lk_fortran_parallel]
+test_names     = ['Numexpr',  'Numba 1', 'Numba 2', 'Fortran S',       'Fortran P'        ]
 
-for N, M in zip(NS, MS):
+print('\n----- 2D Laplace Kernel Source-->Target Timing Tests -----')
+sys.stdout.flush()
+for N2_ind, (SN, TN) in enumerate(zip(source_numbers, target_numbers)):
 
-    print('\n----- 2D Laplace Kernel Source-->Target Timing Tests -----')
-    print('Running for', N, 'source points and', M, 'target points.')
-
-    source_x = np.random.rand(N)
-    source_y = np.random.rand(N)
-    target_x = np.random.rand(M)
-    target_y = np.random.rand(M)
+    print('\nRunning for', SN, 'source points and', TN, 'target points.')
+    sys.stdout.flush()
+    source_x = np.random.rand(SN)
+    source_y = np.random.rand(SN)
+    target_x = np.random.rand(TN)
+    target_y = np.random.rand(TN)
     source = np.row_stack([source_x, source_y])
     target = np.row_stack([target_x, target_y])
-    tau = np.random.rand(N)
-    sd = np.empty(N, dtype=float)
-    D = np.empty([M, N], dtype=float)
-    out = np.empty(M, dtype=float)
+    tau = np.random.rand(SN)
+    sd = np.empty(SN, dtype=float)
+    D = np.empty([TN, SN], dtype=float)
+    out = np.empty(TN, dtype=float)
 
-    print('\nBasic numpy')
-    result_numpy = lk_numpy(source, target, tau)
-    %timeit lk_numpy(source, target, tau)
+    print('\nRunning basic numpy (untimed, for testing solution)')
+    sys.stdout.flush()
+    result_numpy = base_function(source, target, tau)
 
-    if N <= 1000:
-        print('\nBasic numpy, loop')
-        result_numpy_loop = lk_numpy_loop(source, target, tau)
-        %timeit lk_numpy_loop(source, target, tau)
+    for N1_ind, (test, name) in enumerate(zip(test_functions, test_names)):
+        print('--',name,'--')
+        sys.stdout.flush()
+        result = test(source, target, tau)
+        %timeit test(source, target, tau)
+        print('All close? ', np.allclose(result_numpy, result))
+        sys.stdout.flush()
 
-    print('\nNumexpr -- One Core')
-    ne.set_num_threads(1)
-    ne.set_vml_num_threads(1)
-    result_numexpr1 = lk_numexpr(source, target, tau, D)
-    %timeit lk_numexpr(source, target, tau, D)
-
-    print('\nNumexpr -- Max Cores')
-    ne.set_num_threads(ne.detect_number_of_cores())
-    ne.set_vml_num_threads(1)
-    result_numexpr2 = lk_numexpr(source, target, tau, D)
-    %timeit lk_numexpr(source, target, tau, D)
-
-    print('\nNumexpr -- Max VML Cores')
-    ne.set_num_threads(1)
-    ne.set_vml_num_threads(ne.detect_number_of_cores())
-    result_numexpr3 = lk_numexpr(source, target, tau, D)
-    %timeit lk_numexpr(source, target, tau, D)
-
-    print('\nNumba -- Pure')
-    lk_pure_numba(source, target, tau, sd, out)
-    result_pure_numba = out.copy()
-    %timeit lk_pure_numba(source, target, tau, sd, out)
-
-    print('\nFortran -- Serial')
-    result_fortran_serial = lk_fortran(source, target, tau, parallel=False)
-    %timeit lk_fortran(source, target, tau, parallel=False)
-
-    print('\nFortran -- Parallel')
-    result_fortran_parallel = lk_fortran(source, target, tau, parallel=True, out=out)
-    %timeit lk_fortran(source, target, tau, parallel=True, out=out)
-
-    print('\nSanity Checks')
-    print('Numpy vs. Numexpr 1        ', np.allclose(result_numpy, result_numexpr1))
-    print('Numpy vs. Numexpr 2        ', np.allclose(result_numpy, result_numexpr2))
-    print('Numpy vs. Numexpr 3        ', np.allclose(result_numpy, result_numexpr3))
-    print('Numpy vs. Pure Numba       ', np.allclose(result_numpy, result_pure_numba))
-    print('Numpy vs. Fortran, Serial  ', np.allclose(result_numpy, result_fortran_serial))
-    print('Numpy vs. Fortran, Parallel', np.allclose(result_numpy, result_fortran_parallel))

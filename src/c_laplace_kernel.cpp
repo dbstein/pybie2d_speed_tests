@@ -28,7 +28,7 @@ double test_kernel(int npts, int num_threads) {
         vPtr[i] = 0;
     }
     for (int i = 0; i < 2*npts; i++){
-        sPtr[i] = i;
+        sPtr[i] = i+Pi;
         tPtr[i] = i+0.5;
     }
 
